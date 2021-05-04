@@ -18,11 +18,6 @@ router.get('/', async (req,res) => {
     res.render('index', { articles });
 })
 
-// router.get('/secretclubpage',(req,res)=>{
-//     res.render('secretclub',req.session.user)
-// })
-
-
 // route for authorized user only
 router.get("/profile", async (req, res) =>{ 
    if(!req.session.user){
@@ -63,14 +58,13 @@ router.get("/newpost",(req, res)=>{
 })
 
 
-router.post('/newpost',(req,res)=>{
+router.post('/newpost', apiAuth, (req,res)=>{
   
   Article.create({ 
         title:req.body.title,
         content:req.body.content,
       }).then(newPost=>{
-        res.json(newPost);
-        res.render(`article`, req.session.user)
+        res.render(`profile`, req.session.user)
       }).catch(err=>{
         console.log(err);
         res.status(500).json(err);
